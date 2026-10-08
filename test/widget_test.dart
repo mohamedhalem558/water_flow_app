@@ -1,30 +1,32 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:water_flow_app/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Water Flow App dashboard and navigation smoke test',
+      (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpWidget(const WaterFlowApp());
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify Dashboard displays Core Telemetry Cards
+    expect(find.text('CURRENT FLOW RATE'), findsOneWidget);
+    expect(find.text('ACCUMULATED VOLUME'), findsOneWidget);
+
+    // Verify Navigation Tabs exist
+    expect(find.text('Dashboard'), findsOneWidget);
+    expect(find.text('Smart Charts'), findsOneWidget);
+    expect(find.text('History Logs'), findsOneWidget);
+
+    // Tap on 'Smart Charts' tab and trigger a frame.
+    await tester.tap(find.text('Smart Charts'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Smart Consumption Charts'), findsOneWidget);
+
+    // Tap on 'History Logs' tab and trigger a frame.
+    await tester.tap(find.text('History Logs'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Water Flow History & Logs'), findsOneWidget);
   });
 }
